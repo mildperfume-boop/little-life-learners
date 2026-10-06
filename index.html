@@ -1,22 +1,433 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Little Life Learners</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Little Life Learners</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(#dff7ff, #fff8d9);
+  color: #17324d;
+  text-align: center;
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  padding: 25px 18px 50px;
+}
+
+.screen.active { display: block; }
+
+.logo {
+  font-size: 38px;
+  margin: 20px 0 5px;
+}
+
+.tagline {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+.big-button {
+  border: none;
+  border-radius: 22px;
+  padding: 18px 25px;
+  font-size: 24px;
+  font-weight: bold;
+  background: #ffd84d;
+  color: #17324d;
+  box-shadow: 0 6px 0 #e0ad00;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.big-button:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #e0ad00;
+}
+
+.age-grid, .subject-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+.card {
+  border: none;
+  border-radius: 22px;
+  padding: 22px 10px;
+  font-size: 18px;
+  font-weight: bold;
+  min-height: 115px;
+  box-shadow: 0 5px 10px #0002;
+}
+
+.pink { background: #ffb8d9; }
+.green { background: #baf59b; }
+.blue { background: #aee5ff; }
+.purple { background: #d9bdff; }
+.orange { background: #ffd39c; }
+.yellow { background: #fff09c; }
+
+.back {
+  border: none;
+  background: white;
+  border-radius: 15px;
+  padding: 10px 18px;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.stars {
+  background: white;
+  display: inline-block;
+  border-radius: 18px;
+  padding: 10px 18px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.quiz-box {
+  background: white;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 25px;
+  border-radius: 25px;
+  box-shadow: 0 5px 15px #0002;
+}
+
+.question {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.answer {
+  width: 90%;
+  max-width: 400px;
+  margin: 8px;
+  padding: 15px;
+  border: none;
+  border-radius: 16px;
+  font-size: 22px;
+  background: #dff4ff;
+}
+
+.message {
+  font-size: 24px;
+  font-weight: bold;
+  min-height: 35px;
+  margin-top: 15px;
+}
+
+.footer {
+  margin-top: 35px;
+  font-size: 15px;
+}
+</style>
 </head>
 
-<body style="text-align:center; font-family:Arial; background:#e9f9ff; padding:30px;">
+<body>
 
-  <h1>🌈 Little Life Learners 🌈</h1>
+<section id="home" class="screen active">
+  <div class="logo">🌈 Little Life Learners 🌈</div>
+  <div class="tagline">Learn • Play • Grow</div>
+  <div class="subtitle">Fun learning adventures for ages 2–12!</div>
 
-  <h2>Learn • Play • Grow</h2>
+  <div style="font-size:80px;">🧒📚⭐</div>
 
-  <p>Fun learning for ages 2–12!</p>
-
-  <button style="font-size:24px; padding:15px 30px;">
+  <button class="big-button" onclick="showScreen('ages')">
     🎮 Start Learning
   </button>
+
+  <div class="footer">
+    Fun Learning Today for a Brighter Tomorrow!
+  </div>
+</section>
+
+<section id="ages" class="screen">
+  <button class="back" onclick="showScreen('home')">← Home</button>
+
+  <h1>Choose Your Age Group</h1>
+  <div class="stars">⭐ My Stars: <span class="starCount">0</span></div>
+
+  <div class="age-grid">
+    <button class="card pink" onclick="chooseAge('2–4')">
+      👶<br>Ages 2–4<br>Little Explorers
+    </button>
+
+    <button class="card green" onclick="chooseAge('5–7')">
+      🧒<br>Ages 5–7<br>Growing Learners
+    </button>
+
+    <button class="card blue" onclick="chooseAge('8–10')">
+      🎒<br>Ages 8–10<br>Smart Kids
+    </button>
+
+    <button class="card purple" onclick="chooseAge('11–12')">
+      🧠<br>Ages 11–12<br>Brain Builders
+    </button>
+  </div>
+</section>
+
+<section id="subjects" class="screen">
+  <button class="back" onclick="showScreen('ages')">← Age Groups</button>
+
+  <h1>What Would You Like to Learn?</h1>
+  <p id="ageTitle"></p>
+  <div class="stars">⭐ My Stars: <span class="starCount">0</span></div>
+
+  <div class="subject-grid">
+    <button class="card pink" onclick="startQuiz('letters')">
+      🔤<br>Letters & Phonics
+    </button>
+
+    <button class="card orange" onclick="startQuiz('numbers')">
+      🔢<br>Numbers & Math
+    </button>
+
+    <button class="card green" onclick="startQuiz('spelling')">
+      ✏️<br>Spelling
+    </button>
+
+    <button class="card blue" onclick="startQuiz('vocabulary')">
+      📚<br>Vocabulary
+    </button>
+
+    <button class="card purple" onclick="startQuiz('memory')">
+      🧠<br>Memory Games
+    </button>
+
+    <button class="card yellow" onclick="startQuiz('science')">
+      🌎<br>Science & World
+    </button>
+  </div>
+</section>
+
+<section id="quiz" class="screen">
+  <button class="back" onclick="showScreen('subjects')">← Subjects</button>
+
+  <div class="stars">⭐ My Stars: <span class="starCount">0</span></div>
+
+  <div class="quiz-box">
+    <h2 id="quizTitle">Learning Game</h2>
+
+    <div class="question" id="question"></div>
+
+    <div id="answers"></div>
+
+    <div class="message" id="message"></div>
+
+    <button id="nextButton"
+            class="big-button"
+            style="display:none"
+            onclick="nextQuestion()">
+      Next ➜
+    </button>
+  </div>
+</section>
+
+<script>
+let stars = 0;
+let selectedAge = "";
+let currentSubject = "";
+let currentQuestion = 0;
+
+const questions = {
+  letters: [
+    {
+      q: "Which letter does 🍎 Apple start with?",
+      answers: ["A", "B", "C"],
+      correct: "A"
+    },
+    {
+      q: "Which letter does 🐶 Dog start with?",
+      answers: ["B", "D", "G"],
+      correct: "D"
+    },
+    {
+      q: "Which letter does 🐱 Cat start with?",
+      answers: ["C", "T", "M"],
+      correct: "C"
+    }
+  ],
+
+  numbers: [
+    {
+      q: "🍎 🍎 🍎 How many apples?",
+      answers: ["2", "3", "4"],
+      correct: "3"
+    },
+    {
+      q: "What is 2 + 3?",
+      answers: ["4", "5", "6"],
+      correct: "5"
+    },
+    {
+      q: "What is 5 + 3?",
+      answers: ["7", "8", "9"],
+      correct: "8"
+    }
+  ],
+
+  spelling: [
+    {
+      q: "Complete the word: C _ T 🐱",
+      answers: ["A", "E", "O"],
+      correct: "A"
+    },
+    {
+      q: "Complete the word: D _ G 🐶",
+      answers: ["A", "O", "U"],
+      correct: "O"
+    }
+  ],
+
+  vocabulary: [
+    {
+      q: "Which word means very BIG?",
+      answers: ["Tiny", "Huge", "Slow"],
+      correct: "Huge"
+    },
+    {
+      q: "What is the opposite of HOT?",
+      answers: ["Cold", "Fast", "Tall"],
+      correct: "Cold"
+    }
+  ],
+
+  memory: [
+    {
+      q: "Remember: 🍎 🐶 ⭐ — Which one was in the middle?",
+      answers: ["Apple", "Dog", "Star"],
+      correct: "Dog"
+    }
+  ],
+
+  science: [
+    {
+      q: "Which one is a planet?",
+      answers: ["Earth", "Rainbow", "Cloud"],
+      correct: "Earth"
+    },
+    {
+      q: "Which animal lives in water?",
+      answers: ["Fish", "Cat", "Chicken"],
+      correct: "Fish"
+    }
+  ]
+};
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0, 0);
+}
+
+function chooseAge(age) {
+  selectedAge = age;
+  document.getElementById("ageTitle").textContent =
+    "Learning activities for ages " + age;
+  showScreen("subjects");
+}
+
+function startQuiz(subject) {
+  currentSubject = subject;
+  currentQuestion = 0;
+
+  const names = {
+    letters: "🔤 Letters & Phonics",
+    numbers: "🔢 Numbers & Math",
+    spelling: "✏️ Spelling",
+    vocabulary: "📚 Vocabulary",
+    memory: "🧠 Memory Game",
+    science: "🌎 Science & World"
+  };
+
+  document.getElementById("quizTitle").textContent = names[subject];
+  showScreen("quiz");
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const list = questions[currentSubject];
+
+  if (currentQuestion >= list.length) {
+    document.getElementById("question").textContent =
+      "🎉 Great Job! You finished this game!";
+
+    document.getElementById("answers").innerHTML = "";
+    document.getElementById("message").textContent =
+      "You earned " + stars + " stars so far! ⭐";
+
+    document.getElementById("nextButton").style.display = "none";
+    return;
+  }
+
+  const item = list[currentQuestion];
+
+  document.getElementById("question").textContent = item.q;
+  document.getElementById("message").textContent = "";
+  document.getElementById("nextButton").style.display = "none";
+
+  const answers = document.getElementById("answers");
+  answers.innerHTML = "";
+
+  item.answers.forEach(answer => {
+    const button = document.createElement("button");
+    button.className = "answer";
+    button.textContent = answer;
+    button.onclick = () => checkAnswer(answer, item.correct);
+    answers.appendChild(button);
+  });
+}
+
+function checkAnswer(answer, correct) {
+  const message = document.getElementById("message");
+
+  if (answer === correct) {
+    message.textContent = "🎉 Great job! You earned a star! ⭐";
+    stars++;
+    updateStars();
+  } else {
+    message.textContent = "💛 Nice try! The answer is " + correct + ".";
+  }
+
+  document.querySelectorAll(".answer").forEach(button => {
+    button.disabled = true;
+  });
+
+  document.getElementById("nextButton").style.display = "inline-block";
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  loadQuestion();
+}
+
+function updateStars() {
+  document.querySelectorAll(".starCount").forEach(el => {
+    el.textContent = stars;
+  });
+}
+</script>
 
 </body>
 </html>
